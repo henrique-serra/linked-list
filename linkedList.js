@@ -1,5 +1,5 @@
 class Node {
-  constructor(value, next = null) {
+  constructor(value = null, next = null) {
     this.value = value;
     this.next = next;
   }
@@ -51,7 +51,10 @@ class LinkedList {
   };
 
   at(index) {
-    if(index > (this.size() - 1)) return null;
+    if(Math.abs(index) > (this.size() - 1)) {
+      console.log('Out of range!');
+      return null;
+    };
     let i = 0;
     
     if(index < 0) {
@@ -120,7 +123,41 @@ class LinkedList {
   };
 
   insertAt(value, index) {
+    let currentNode = this.at(index);
+    if(!currentNode) return null;
+    if(index === 0) return this.prepend(value);
     
+    if(index > 0) {
+      let previousNode = this.at(index - 1);
+      previousNode.next = new Node(value, currentNode);
+      return this;
+    }
+
+    if(index < 0) {
+      let nextNode = currentNode.next;
+      currentNode.next = new Node(value, nextNode);
+      return this;
+    }
+
+    return this;
+  };
+
+  removeAt(index) {
+    // Check if index is in the range of the linked list
+    if(Math.abs(index) > (this.size() - 1)) {
+      console.log('Out of range!');
+      return null;
+    };
+
+    let nextNode = (index === -1) ? null : this.at(index + 1);
+    if(index === 0) {
+      this.head = nextNode;
+      return this;
+    }
+
+    let previousNode = this.at(index - 1);
+    previousNode.next = nextNode;
+    return this;
   }
 }
 
